@@ -7,6 +7,7 @@ OBJ_DIR = obj
 
 SRCS = main.cpp BitcoinExchange.cpp
 OBJS = $(addprefix $(OBJ_DIR)/, $(SRCS:.cpp=.o))
+DEPS = $(OBJS:.o=.d)
 
 all: $(NAME)
 
@@ -16,8 +17,8 @@ $(NAME): $(OBJS)
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 
-$(OBJ_DIR)/%.o: %.cpp BitcoinExchange.hpp | $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -MMD -MP -c $< -o $@
 
 clean:
 	rm -rf $(OBJ_DIR)
@@ -29,3 +30,4 @@ re: fclean all
 
 .PHONY: all re clean fclean
 	
+-include $(DEPS)
