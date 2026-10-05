@@ -20,7 +20,7 @@ $(OBJ_DIR)/%.o: %.cpp BitcoinExchange.hpp | $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJS)
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	rm -rf $(NAME)
