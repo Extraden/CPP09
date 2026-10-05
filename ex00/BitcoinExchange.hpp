@@ -12,7 +12,8 @@ class BitcoinExchange
 		BitcoinExchange& operator=(const BitcoinExchange& other);
 		~BitcoinExchange();
 
-    int loadDatabase(const std::string& database);
+    void loadDatabase(const std::string& database);
+    void  exchange(const char *input);
 
 	private:
     std::map<std::string, double> rates;

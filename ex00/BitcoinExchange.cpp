@@ -1,6 +1,12 @@
 #include "BitcoinExchange.hpp"
+#include <cstddef>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
+#include <string>
+#include <iostream>
+#include <cctype>
+#include <cstdbool>
 
 BitcoinExchange::BitcoinExchange() {}
 
@@ -16,12 +22,14 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
 BitcoinExchange::~BitcoinExchange() {}
 
 
-int BitcoinExchange::loadDatabase(const std::string& database)
+void BitcoinExchange::loadDatabase(const std::string& database)
 {
   std::ifstream data(database.c_str());
 
+  //TODO exceptions
+  
   if (!data.is_open())
-    return 1;
+    return;
 
   std::string line;
 
@@ -43,5 +51,66 @@ int BitcoinExchange::loadDatabase(const std::string& database)
     rates[date] = price;
 
   }
-  return 0;
+}
+
+static bool is_valid_date(std::string& date)
+{
+  if (date.length() != 10)
+    return false;
+
+
+  for (std::size_t i = 0; i < date.size(); ++i)
+  {
+    if (i == 4 || i == 7)
+    {
+      if (date[4] != '-' || date[7] != '-')
+        return false;
+      else
+       continue;
+    }
+    if (!std::isdigit(static_cast<unsigned int>(date[i])))
+      return false;
+  }
+  return true;
+}
+
+
+static bool is_line_valid(std::string& line)
+{
+  std::istringstream iss(line);
+
+  std::string date;
+  std::string value;
+
+  std::size_t sep = line.find("|");
+  if (sep == std::string::npos)
+    return false;
+
+
+  if (!is_valid_date(date))
+    return false;
+
+  return true;
+}
+
+void  BitcoinExchange::exchange(const char *input)
+{
+  std::ifstream file(input);
+
+  if (!file)
+    throw std::runtime_error("Error opening file!\n");
+
+  std::string line;
+
+  std::getline(file, line);
+  //TODO check first line
+
+
+  while (std::getline(file, line))
+  {
+    if (is_line_valid(line))
+      std::cout << line;
+  }
+
+
 }

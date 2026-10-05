@@ -16,6 +16,7 @@ int	main(int argc, char *argv[])
   BitcoinExchange btc;
 
   btc.loadDatabase("data.csv");
+  btc.exchange(argv[1]);
 
 	return 0;
 }
