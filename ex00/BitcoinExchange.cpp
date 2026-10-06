@@ -6,7 +6,6 @@
 #include <string>
 #include <iostream>
 #include <cctype>
-#include <cstdbool>
 
 BitcoinExchange::BitcoinExchange() {}
 
@@ -29,7 +28,7 @@ void BitcoinExchange::loadDatabase(const std::string& database)
   //TODO exceptions
   
   if (!data.is_open())
-    return;
+    throw std::runtime_error("Database can't open");
 
   std::string line;
 
@@ -98,7 +97,7 @@ void  BitcoinExchange::exchange(const char *input)
   std::ifstream file(input);
 
   if (!file)
-    throw std::runtime_error("Error opening file!\n");
+    throw std::runtime_error("Error opening file!");
 
   std::string line;
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "BitcoinExchange.hpp"
+#include <stdexcept>
 
 int	main(int argc, char *argv[])
 {
@@ -15,8 +16,15 @@ int	main(int argc, char *argv[])
 
   BitcoinExchange btc;
 
-  btc.loadDatabase("data.csv");
-  btc.exchange(argv[1]);
+  try 
+  {
+    btc.loadDatabase(DATABASE);
+    btc.exchange(argv[1]);
+  }
+  catch (const std::exception& e)
+  {
+    std::cout << e.what() << "\n";
+  }
 
 	return 0;
 }
