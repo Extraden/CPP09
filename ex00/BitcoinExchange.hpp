@@ -1,6 +1,8 @@
 #ifndef BITCOINEXCHANGE_HPP
 # define BITCOINEXCHANGE_HPP
 
+# define DATABASE "./data.csv"
+
 #include <string>
 #include <map>
 
