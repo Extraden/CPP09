@@ -54,11 +54,7 @@ void BitcoinExchange::loadDatabase(const std::string& database)
 static bool is_date_valid(std::string& date)
 {
   if (date.length() != 10)
-  {
-    std::cout << date.length() << "\n";
     return false;
-  }
-
 
   for (std::size_t i = 0; i < date.size(); ++i)
   {
@@ -73,35 +69,38 @@ static bool is_date_valid(std::string& date)
       return false;
   }
 
+  //std::cout << date.substr(5, 7);
+  int month;
+  int daysInMonths[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+  (void)month;
+  (void)daysInMonths;
+
   return true;
 }
 
-int  parseLine(std::string& line, std::string& date, double& rate)
+int  BitcoinExchange::parseLine(std::string& line, std::string& date, double& rate)
 {
-
-
-    return 0;
-}
-
-static bool is_line_valid(std::string& line)
-{
-  std::istringstream iss(line);
-
-  std::string value;
-
   std::size_t sep = line.find("|");
   if (sep == std::string::npos || line[sep - 1] != ' ')
   {
     std::cout << "Error: bad input => " << line << "\n";
-    return false;
+    return 1;
   }
 
-
-  std::string date = line.substr(0, sep - 1);
+  date = line.substr(0, sep - 1);
   if (!is_date_valid(date))
-    return false;
+    return 1;
 
-  return true;
+  std::string rateStr = line.substr(sep + 1)  ;
+
+
+  std::stringstream iss(rateStr);
+
+  if (!(iss >> rate))
+    return 1;
+
+  return 0;
 }
 
 void  BitcoinExchange::exchange(const char *input)
@@ -124,7 +123,24 @@ void  BitcoinExchange::exchange(const char *input)
 
     if (parseLine(line, date, value))
       continue;
-  }
 
+    std::map<std::string, double>::const_iterator it =
+            rates.upper_bound(date);
 
+    if (it == rates.begin())
+    {
+        std::cerr << "Error: no earlier date available => "
+                  << date << std::endl;
+        continue;
+    }
+
+    --it;
+
+    std::cout << date
+              << " => "
+              << value
+              << " = "
+              << value * it->second
+              << std::endl;
+    }
 }
