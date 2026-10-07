@@ -70,12 +70,50 @@ static bool is_date_valid(std::string& date)
   }
 
   //std::cout << date.substr(5, 7);
+  int year;
+  char sep1;
   int month;
+  char sep2;
+  int day;
   int daysInMonths[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
-  (void)month;
-  (void)daysInMonths;
+  std::stringstream iss(date);
+  iss >> year >> sep1 >> month >> sep2 >> day;
+  if (!iss)
+  {
+    std::cout << "Error: can't parse date.\n";
+    return false;
+  }
 
+  if (year < 0)
+  {
+    std::cout << "Error: year is negative.\n";
+    return false;
+  }
+
+  if (month == 2)
+  {
+    if (year % 400 == 0)
+      daysInMonths[1] = 29;
+    else if (year % 100 == 0)
+      daysInMonths[1] = 28;
+    else if (year % 4 == 0)
+      daysInMonths[1] = 29;
+    else
+      daysInMonths[1] = 28;
+  }
+
+  if (month <= 0 || month > 12)
+  {
+    std::cout << "Error: wrong month.\n";
+    return false;
+  }
+
+  if (day <= 0 || day > daysInMonths[month - 1])
+  {
+    std::cout << "Error: wrong day.\n";
+    return false;
+  }
   return true;
 }
 
