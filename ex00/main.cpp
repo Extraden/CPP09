@@ -7,8 +7,8 @@ int	main(int argc, char *argv[])
 {
 	if (argc != 2)
 	{
-		std::cout << "Wrong input!\nUsage:\n./btc input.txt\n";
-    return 0;
+		std::cout << "Error: could not open file.\n";
+    return 1;
 	}
 
 

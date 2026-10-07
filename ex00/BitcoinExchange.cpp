@@ -79,16 +79,7 @@ static bool is_date_valid(const std::string& date)
   std::stringstream iss(date);
   iss >> year >> sep1 >> month >> sep2 >> day;
   if (!iss)
-  {
-    std::cout << "Error: can't parse date.\n";
     return false;
-  }
-
-  if (year < 0)
-  {
-    std::cout << "Error: year is negative.\n";
-    return false;
-  }
 
   if (month == 2)
   {
@@ -103,16 +94,11 @@ static bool is_date_valid(const std::string& date)
   }
 
   if (month <= 0 || month > 12)
-  {
-    std::cout << "Error: wrong month.\n";
     return false;
-  }
 
   if (day <= 0 || day > daysInMonths[month - 1])
-  {
-    std::cout << "Error: wrong day.\n";
     return false;
-  }
+
   return true;
 }
 
@@ -126,7 +112,10 @@ int  BitcoinExchange::parseLine(const std::string& line, std::string& date, doub
 
   date = line.substr(0, 10);
   if (!is_date_valid(date))
+  {
+    std::cout << "Error: bad input => " << line << ".\n";
     return 1;
+  }
 
   std::string rateStr = line.substr(13);
 
@@ -135,7 +124,7 @@ int  BitcoinExchange::parseLine(const std::string& line, std::string& date, doub
 
   if (!(iss >> rate))
   {
-    std::cout << "Error: couldn't parse value.\n";
+    std::cout << "Error: bad input => " << line << ".\n";
     return 1;
   }
 
@@ -143,7 +132,7 @@ int  BitcoinExchange::parseLine(const std::string& line, std::string& date, doub
 
   if (iss >> extra)
   {
-    std::cout << "Error: value has wrong characters.\n";
+    std::cout << "Error: couldn't parse value.\n";
     return 1;
   }
 
@@ -167,7 +156,7 @@ void  BitcoinExchange::exchange(const char *input)
   std::ifstream file(input);
 
   if (!file)
-    throw std::runtime_error("Error opening file!");
+    throw std::runtime_error("Error: could not open file.");
 
   std::string line;
 
