@@ -35,6 +35,7 @@
 
 # Executables
 btc
+RPN
 *.exe
 *.out
 *.app
