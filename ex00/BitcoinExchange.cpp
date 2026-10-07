@@ -112,11 +112,15 @@ void  BitcoinExchange::exchange(const char *input)
 
   std::string line;
 
+  if (!std::getline(file, line))
+    throw std::runtime_error("Error: empty file!");
+
+  
+  if (!(line == "date | value"))
+    throw std::runtime_error("Error: no header!");
 
   while (std::getline(file, line))
   {
-    if (line == "data | value")
-      continue;
 
     std::string date;
     double value;
@@ -136,11 +140,6 @@ void  BitcoinExchange::exchange(const char *input)
 
     --it;
 
-    std::cout << date
-              << " => "
-              << value
-              << " = "
-              << value * it->second
-              << std::endl;
+    std::cout << date << " => " << value << " = " << value * it->second << std::endl;
     }
 }
