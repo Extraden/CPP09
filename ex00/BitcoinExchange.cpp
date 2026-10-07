@@ -116,10 +116,11 @@ static bool is_date_valid(std::string& date)
   return true;
 }
 
-int  BitcoinExchange::parseLine(std::string& line, std::string& date, double& rate)
+int  BitcoinExchange::parseLine(const std::string& line, std::string& date, double& rate)
 {
-  std::size_t sep = line.find("|");
-  if (sep == std::string::npos || line[sep - 1] != ' ')
+  std::size_t sep;
+
+  if (line.size() < 14 || ((sep = line.find("|")) == std::string::npos) || line[sep - 1] != ' ' || line[sep + 1] != ' ')
   {
     std::cout << "Error: bad input => " << line << ".\n";
     return 1;
