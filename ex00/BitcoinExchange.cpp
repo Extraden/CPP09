@@ -191,13 +191,13 @@ void  BitcoinExchange::exchange(const char *input)
 
     if (it == rates.begin())
     {
-        std::cerr << "Error: no earlier date available => "
-                  << date << std::endl;
+        std::cout << "Error: no earlier date available => "
+                  << date << "\n";
         continue;
     }
 
     --it;
 
-    std::cout << date << " => " << value << " = " << value * it->second << std::endl;
+    std::cout << date << " => " << value << " = " << value * it->second << "\n";
   }
 }
