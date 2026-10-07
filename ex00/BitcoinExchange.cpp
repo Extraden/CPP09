@@ -51,7 +51,7 @@ void BitcoinExchange::loadDatabase(const std::string& database)
   }
 }
 
-static bool is_date_valid(std::string& date)
+static bool is_date_valid(const std::string& date)
 {
   if (date.length() != 10)
     return false;
@@ -118,19 +118,17 @@ static bool is_date_valid(std::string& date)
 
 int  BitcoinExchange::parseLine(const std::string& line, std::string& date, double& rate)
 {
-  std::size_t sep;
-
-  if (line.size() < 14 || ((sep = line.find("|")) == std::string::npos) || line[sep - 1] != ' ' || line[sep + 1] != ' ')
+  if (line.size() < 14 || line[11] != '|' || line[10] != ' ' || line[12] != ' ')
   {
     std::cout << "Error: bad input => " << line << ".\n";
     return 1;
   }
 
-  date = line.substr(0, sep - 1);
+  date = line.substr(0, 10);
   if (!is_date_valid(date))
     return 1;
 
-  std::string rateStr = line.substr(sep + 1);
+  std::string rateStr = line.substr(13);
 
 
   std::stringstream iss(rateStr);
