@@ -69,7 +69,6 @@ static bool is_date_valid(std::string& date)
       return false;
   }
 
-  //std::cout << date.substr(5, 7);
   int year;
   char sep1;
   int month;
