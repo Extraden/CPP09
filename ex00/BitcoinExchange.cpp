@@ -65,7 +65,7 @@ static bool is_date_valid(const std::string& date)
       else
        continue;
     }
-    if (!std::isdigit(static_cast<unsigned int>(date[i])))
+    if (!std::isdigit(static_cast<unsigned char>(date[i])))
       return false;
   }
 
@@ -92,6 +92,9 @@ static bool is_date_valid(const std::string& date)
     else
       daysInMonths[1] = 28;
   }
+
+  if (year <= 0)
+    return false;
 
   if (month <= 0 || month > 12)
     return false;
