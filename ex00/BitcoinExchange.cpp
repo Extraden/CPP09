@@ -84,7 +84,7 @@ int  BitcoinExchange::parseLine(std::string& line, std::string& date, double& ra
   std::size_t sep = line.find("|");
   if (sep == std::string::npos || line[sep - 1] != ' ')
   {
-    std::cout << "Error: bad input => " << line << "\n";
+    std::cout << "Error: bad input => " << line << ".\n";
     return 1;
   }
 
@@ -92,13 +92,36 @@ int  BitcoinExchange::parseLine(std::string& line, std::string& date, double& ra
   if (!is_date_valid(date))
     return 1;
 
-  std::string rateStr = line.substr(sep + 1)  ;
+  std::string rateStr = line.substr(sep + 1);
 
 
   std::stringstream iss(rateStr);
 
   if (!(iss >> rate))
+  {
+    std::cout << "Error: couldn't parse value.\n";
     return 1;
+  }
+
+  char extra;
+
+  if (iss >> extra)
+  {
+    std::cout << "Error: value has wrong characters.\n";
+    return 1;
+  }
+
+  if (rate < 0)
+  {
+    std::cout << "Error: not a positive number.\n";
+    return 1;
+  }
+
+  if  (rate > 1000)
+  {
+    std::cout << "Error: too large a number.\n";
+    return 1;
+  }
 
   return 0;
 }
@@ -121,7 +144,6 @@ void  BitcoinExchange::exchange(const char *input)
 
   while (std::getline(file, line))
   {
-
     std::string date;
     double value;
 
@@ -141,5 +163,5 @@ void  BitcoinExchange::exchange(const char *input)
     --it;
 
     std::cout << date << " => " << value << " = " << value * it->second << std::endl;
-    }
+  }
 }
