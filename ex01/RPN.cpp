@@ -1,6 +1,7 @@
 #include "RPN.hpp"
 #include <sstream>
 #include <stack>
+#include <stdexcept>
 
 static int calculate(int left, int right, char c)
 {
@@ -13,7 +14,11 @@ static int calculate(int left, int right, char c)
   else if (c == '*')
     result = left * right;
   else if (c == '/')
+  {
+    if (right == 0)
+      throw std::runtime_error("Division by zero");
     result = left / right;
+  }
   else
     throw std::runtime_error("Error");
 
@@ -39,7 +44,8 @@ int solve(const std::string& expr)
       s.push(c - '0');
     else if (c == '+' || c == '-' || c == '*' || c == '/')
       {
-
+        if (s.size() < 2)
+          throw std::runtime_error("Error");
         int right = s.top();
         s.pop();
         int left = s.top();
@@ -49,5 +55,7 @@ int solve(const std::string& expr)
     else 
       throw std::runtime_error("Error");
   }
+  if (s.size() != 1)
+    throw std::runtime_error("Error");
   return s.top();
 }
