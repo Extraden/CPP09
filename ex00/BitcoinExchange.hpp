@@ -16,10 +16,11 @@ class BitcoinExchange
 
     void loadDatabase(const std::string& database);
     void  exchange(const char *input);
-    int  parseLine(const std::string& line, std::string& date, double& rate);
 
 	private:
     std::map<std::string, double> rates;
+
+    int  parseLine(const std::string& line, std::string& date, double& rate);
 };
 
 #endif
