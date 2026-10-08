@@ -29,5 +29,13 @@ void  parseArguments(int argc, char *argv[], std::vector<int>& v)
     }
     i++;
   }
+  if (v.empty())
+    throw std::runtime_error("Error");
+}
+
+
+void  fordJohnson(const std::vector<Item>& items)
+{
+  (void) items;
 }
 
