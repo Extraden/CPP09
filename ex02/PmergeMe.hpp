@@ -16,6 +16,6 @@ struct Pair
 };
 
 void  parseArguments(int argc, char *argv[], std::vector<int>& v);
-void  fordJohnson(const std::vector<Item>& items);
+void  fordJohnson(const std::vector<int>& items);
 
 #endif
