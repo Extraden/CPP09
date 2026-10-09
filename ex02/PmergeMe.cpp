@@ -1,4 +1,5 @@
 #include "PmergeMe.hpp"
+#include <cstddef>
 #include <vector>
 #include <cerrno>
 #include <climits>
@@ -6,6 +7,45 @@
 #include <sstream>
 #include <stdexcept>
 #include <iostream>
+
+std::vector<int> result;
+
+std::vector<Item> intsToItems(std::vector<int>& v)
+{
+  std::vector<Item> items;
+  for (std::size_t i = 0; i < v.size(); ++i)
+  {
+    Item item;
+    item.value = v[i];
+    item.id = i;
+    items.push_back(item);
+  }
+  return items;
+
+}
+
+void  fillPairs(std::vector<Pair>& pairs, std::vector<Item>& items)
+{
+
+  for (std::size_t i = 0; i < items.size(); i = i + 2)
+  {
+    Pair pair;
+
+    pair.small = items[i];
+    pair.big = items[i + 1];
+    //TODO fix if odd amount if items
+    pairs.push_back(pair);
+  }
+}
+
+int jacobStahl(int n)
+{
+  if (n == 0)
+    return 0;
+  if (n == 1)
+    return 1;
+  return (jacobStahl(n - 1) + 2 * jacobStahl(n - 2));
+}
 
 void  parseArguments(int argc, char *argv[], std::vector<int>& v)
 {
@@ -34,20 +74,6 @@ void  parseArguments(int argc, char *argv[], std::vector<int>& v)
     throw std::runtime_error("Error");
 }
 
-static std::vector<Item> intsToItems(const std::vector<int>& v)
-{
-  std::vector<Item> items;
-
-  for (std::size_t i = 0; i < v.size(); ++i)
-  {
-    Item item;
-    item.id = i;
-    item.value = v[i];
-    items.push_back(item);
-  }
-  return items;
-}
-
 void  sortPairs(std::vector<Pair>& pairs)
 {
 
@@ -56,40 +82,58 @@ void  sortPairs(std::vector<Pair>& pairs)
     if (pairs[i].small.value > pairs[i].big.value)
       std::swap(pairs[i].small, pairs[i].big);
     
-    pairs[i].small.id = i * 2;
-    pairs[i].big.id = pairs[i].small.id + 1;
+    pairs[i].small.id = i;
+    pairs[i].big.id = i;
   }
 }
 
-void  fordJohnson(const std::vector<int>& winners)
+// void  binaryInsert(std::vector<Item>& mainChain, Item& pending, std::size_t end)
+// {
+//   if (end )
+//   std::size_t size = mainChain.size();
+//
+// }
+
+void insert(std::vector<Item>& mainChain, std::vector<Item>& pending)
 {
-  if (winners.size() <= 1)
+  mainChain.insert(mainChain.begin(), pending[0]);
+  if (pending.size() == 1)
     return;
 
-  const std::vector<Item> items = intsToItems(winners);
+  // for (std::size_t i = 1; i < pending.size(); ++i)
+  //   binaryInsert(mainChain, pending[i], mainChain.size() - 1);
+
+}
+
+void  fordJohnson(std::vector<Item>& items)
+{
+  if (items.size() <= 1)
+    return;
+
   std::vector<Pair> pairs;
-
-  for (std::size_t i = 0; i < items.size(); i = i + 2)
-  {
-    Pair pair;
-
-    pair.small = items[i];
-    pair.big = items[i + 1];
-    //TODO fix if odd amount if items
-    pairs.push_back(pair);
-  }
-
+  fillPairs(pairs, items);
   sortPairs(pairs);
-  std::vector<int> newWinners;
+
+  std::vector<Item> winners;
+  std::vector<Item> pending;
 
   for (std::size_t i = 0; i < pairs.size(); ++i)
   {
-    newWinners.push_back(pairs[i].big.value);
-    std::cout << newWinners[i] << " ";
+    winners.push_back(pairs[i].big);
+    pending.push_back(pairs[i].small);
+    std::cout << winners[i].value << " ";
     if (i == pairs.size() - 1)
       std::cout << "\n";
   }
 
-  fordJohnson(newWinners);
+  fordJohnson(winners);
+  insert(winners, pending);
+  
+  for (std::size_t i = 0; i < winners.size(); ++i)
+  {
+    std::cout << winners[i].value << " ";
+    if (i == winners.size() - 1)
+      std::cout << "\n";
+  }
 }
 

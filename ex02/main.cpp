@@ -16,6 +16,7 @@ int	main(int argc, char *argv[])
     return 1;
   }
 
-  fordJohnson(numbers);
+  std::vector<Item> items = intsToItems(numbers);
+  fordJohnson(items);
 	return 0;
 }
