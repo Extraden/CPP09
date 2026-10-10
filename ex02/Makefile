@@ -7,7 +7,7 @@ OBJ_DIR = obj
 
 SRCS = main.cpp PmergeMe.cpp
 OBJS = $(addprefix $(OBJ_DIR)/,$(SRCS:.cpp=.o))
-INCLUDES = $(OBJS.o=.d)
+DEPS = $(OBJS.o=.d)
 
 all: $(NAME)
 
