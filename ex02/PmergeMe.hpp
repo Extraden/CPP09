@@ -29,7 +29,7 @@ void  binaryInsert(std::vector<Item>& mainChain, Item& item, std::vector<Item>::
 void  parseArguments(int argc, char *argv[], std::deque<int>& v);
 void  fordJohnson(std::deque<Item>& items);
 std::deque<Item> intsToItems(std::deque<int>& v);
-void  fillPairs(std::deque<Pair>& pairs, std::vector<Item>& items);
-void  binaryInsert(std::deque<Item>& mainChain, Item& item, std::vector<Item>::iterator first, std::vector<Item>::iterator last);
+void  fillPairs(std::deque<Pair>& pairs, std::deque<Item>& items);
+void  binaryInsert(std::deque<Item>& mainChain, Item& item, std::deque<Item>::iterator first, std::deque<Item>::iterator last);
 
 #endif
