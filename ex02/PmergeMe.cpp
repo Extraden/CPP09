@@ -6,9 +6,6 @@
 #include <cstdlib>
 #include <sstream>
 #include <stdexcept>
-#include <iostream>
-
-std::vector<int> result;
 
 std::vector<Item> intsToItems(std::vector<int>& v)
 {
