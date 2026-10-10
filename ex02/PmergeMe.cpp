@@ -87,21 +87,29 @@ void  sortPairs(std::vector<Pair>& pairs)
   }
 }
 
-// void  binaryInsert(std::vector<Item>& mainChain, Item& pending, std::size_t end)
-// {
-//   if (end )
-//   std::size_t size = mainChain.size();
-//
-// }
+void  binaryInsert(std::vector<Item>& mainChain, Item& item, std::vector<Item>::iterator first, std::vector<Item>::iterator last)
+{
 
-void insert(std::vector<Item>& mainChain, std::vector<Item>& pending)
+  while (first < last)
+  {
+    std::vector<Item>::iterator middle = first + (last - first) / 2;
+
+    if (item.value < middle->value)
+      last = middle;
+    else
+      first = middle + 1;
+  }
+      mainChain.insert(first, item);
+}
+
+void insertPending(std::vector<Item>& mainChain, std::vector<Item>& pending)
 {
   mainChain.insert(mainChain.begin(), pending[0]);
   if (pending.size() == 1)
     return;
 
-  // for (std::size_t i = 1; i < pending.size(); ++i)
-  //   binaryInsert(mainChain, pending[i], mainChain.size() - 1);
+  for (std::vector<Item>::iterator it = pending.begin() + 1; it != pending.end(); ++it) //TODO replace regular loop with Jacobstahl sequence
+    binaryInsert(mainChain, *it, mainChain.begin() + 1, mainChain.end());
 
 }
 
@@ -127,7 +135,7 @@ void  fordJohnson(std::vector<Item>& items)
   }
 
   fordJohnson(winners);
-  insert(winners, pending);
+  insertPending(winners, pending);
   
   for (std::size_t i = 0; i < winners.size(); ++i)
   {
