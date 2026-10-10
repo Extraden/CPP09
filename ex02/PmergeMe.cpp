@@ -98,30 +98,48 @@ void  binaryInsert(std::vector<Item>& mainChain, Item& item, std::vector<Item>::
       mainChain.insert(first, item);
 }
 
+void insertOne(std::vector<Item>& mainChain, Item& item, std::vector<Pair>& pairs)
+{
+    std::vector<Item>::iterator last = mainChain.end();
+
+    for (std::size_t j = 0; j < pairs.size(); ++j)
+    {
+        if (pairs[j].small.id == item.id)
+        {
+            for (std::vector<Item>::iterator it = mainChain.begin();
+                 it != mainChain.end(); ++it)
+            {
+                if (it->id == pairs[j].big.id)
+                {
+                    last = it;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    binaryInsert(mainChain, item, mainChain.begin(), last);
+}
 void insertPending(std::vector<Item>& mainChain, std::vector<Item>& pending, std::vector<Pair>& pairs)
 {
     mainChain.insert(mainChain.begin(), pending[0]);
 
-    for (std::size_t i = 1; i < pending.size(); ++i)
+    std::size_t previous = 1;
+    int k = 3;
+
+    while (previous < pending.size())
     {
-      std::vector<Item>::iterator last = mainChain.end();
+        std::size_t current = jacobStahl(k);
 
-      for (std::size_t j = 0; j < pairs.size(); ++j)
-      {
-        if (pairs[i].small.id == pending[i].id)
-        {
-          for (std::vector<Item>::iterator it = mainChain.begin(); it != mainChain.end(); ++it)
-          {
-            if (it->id == pairs[j].big.id)
-            {
-              last = it;
-              break;
-            }
-          }
-        }
-      }
+        if (current > pending.size())
+            current = pending.size();
 
-        binaryInsert(mainChain, pending[i], mainChain.begin(), last);
+        for (std::size_t i = current; i > previous; --i)
+            insertOne(mainChain, pending[i - 1], pairs);
+
+        previous = current;
+        ++k;
     }
 }
 
