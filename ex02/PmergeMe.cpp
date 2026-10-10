@@ -7,6 +7,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <deque>
+#include <algorithm>
 
 
 // ============================================== Vector ==================================================================
