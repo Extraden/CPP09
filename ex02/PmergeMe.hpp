@@ -19,6 +19,6 @@ void  parseArguments(int argc, char *argv[], std::vector<int>& v);
 void  fordJohnson(std::vector<Item>& items);
 std::vector<Item> intsToItems(std::vector<int>& v);
 void  fillPairs(std::vector<Pair>& pairs, std::vector<Item>& items);
-void  binaryInsert(std::vector<Item>& mainChain, Item& pending, std::size_t end);
+void  binaryInsert(std::vector<Item>& mainChain, Item& item, std::vector<Item>::iterator first, std::vector<Item>::iterator last);
 
 #endif
