@@ -17,6 +17,11 @@ int	main(int argc, char *argv[])
   }
 
   std::vector<Item> items = intsToItems(numbers);
+
   fordJohnson(items);
+
+  for (std::size_t i = 0; i < items.size(); ++i)
+    std::cout << items[i].value << " ";
+  std::cout << "\n";
 	return 0;
 }
