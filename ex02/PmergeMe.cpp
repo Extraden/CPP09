@@ -98,14 +98,30 @@ void  binaryInsert(std::vector<Item>& mainChain, Item& item, std::vector<Item>::
       mainChain.insert(first, item);
 }
 
-void insertPending(std::vector<Item>& mainChain, std::vector<Item>& pending)
+void insertPending(std::vector<Item>& mainChain, std::vector<Item>& pending, std::vector<Pair>& pairs)
 {
     mainChain.insert(mainChain.begin(), pending[0]);
 
     for (std::size_t i = 1; i < pending.size(); ++i)
     {
-        binaryInsert(mainChain, pending[i],
-                     mainChain.begin(), mainChain.end());
+      std::vector<Item>::iterator last = mainChain.end();
+
+      for (std::size_t j = 0; j < pairs.size(); ++j)
+      {
+        if (pairs[i].small.id == pending[i].id)
+        {
+          for (std::vector<Item>::iterator it = mainChain.begin(); it != mainChain.end(); ++it)
+          {
+            if (it->id == pairs[j].big.id)
+            {
+              last = it;
+              break;
+            }
+          }
+        }
+      }
+
+        binaryInsert(mainChain, pending[i], mainChain.begin(), last);
     }
 }
 
@@ -146,7 +162,7 @@ void  fordJohnson(std::vector<Item>& items)
   if (hasOdd)
     pending.push_back(odd);
 
-  insertPending(winners, pending);
+  insertPending(winners, pending, pairs);
 
   items.swap(winners);
 }
