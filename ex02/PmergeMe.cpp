@@ -76,14 +76,10 @@ void  parseArguments(int argc, char *argv[], std::vector<int>& v)
 
 void  sortPairs(std::vector<Pair>& pairs)
 {
-
   for (std::size_t i = 0; i < pairs.size(); ++i)
   {
     if (pairs[i].small.value > pairs[i].big.value)
       std::swap(pairs[i].small, pairs[i].big);
-    
-    pairs[i].small.id = i;
-    pairs[i].big.id = i;
   }
 }
 
@@ -104,23 +100,13 @@ void  binaryInsert(std::vector<Item>& mainChain, Item& item, std::vector<Item>::
 
 void insertPending(std::vector<Item>& mainChain, std::vector<Item>& pending)
 {
-  mainChain.insert(mainChain.begin(), pending[0]);
-  if (pending.size() == 1)
-    return;
+    mainChain.insert(mainChain.begin(), pending[0]);
 
-  int k = 3;
-
-  std::size_t i = 0;
-  while (i < pending.size() - 1)
-  {
-    int jacob = jacobStahl(k);
-    std::cout << jacob << " JACOB\n";
-    binaryInsert(mainChain, *(pending.begin() + jacob + 1), mainChain.begin() + 1, mainChain.end());
-    i++;
-    k++;
-  }
-  
-
+    for (std::size_t i = 1; i < pending.size(); ++i)
+    {
+        binaryInsert(mainChain, pending[i],
+                     mainChain.begin(), mainChain.end());
+    }
 }
 
 void  fordJohnson(std::vector<Item>& items)
@@ -128,30 +114,40 @@ void  fordJohnson(std::vector<Item>& items)
   if (items.size() <= 1)
     return;
 
+  bool hasOdd = (items.size() % 2 != 0);
+  Item odd;
+
+  if (hasOdd)
+    odd = items.back();
+
   std::vector<Pair> pairs;
   fillPairs(pairs, items);
   sortPairs(pairs);
 
   std::vector<Item> winners;
-  std::vector<Item> pending;
 
   for (std::size_t i = 0; i < pairs.size(); ++i)
-  {
     winners.push_back(pairs[i].big);
-    pending.push_back(pairs[i].small);
-    std::cout << winners[i].value << " ";
-    if (i == pairs.size() - 1)
-      std::cout << "\n";
-  }
 
   fordJohnson(winners);
-  insertPending(winners, pending);
-  
+
+  std::vector<Item> pending;
+
   for (std::size_t i = 0; i < winners.size(); ++i)
   {
-    std::cout << winners[i].value << " ";
-    if (i == winners.size() - 1)
-      std::cout << "\n";
+    for (std::size_t j = 0; j < pairs.size(); ++j)
+      if (winners[i].id == pairs[j].big.id)
+      {
+        pending.push_back(pairs[j].small);
+        break;
+      }
   }
+
+  if (hasOdd)
+    pending.push_back(odd);
+
+  insertPending(winners, pending);
+
+  items.swap(winners);
 }
 
