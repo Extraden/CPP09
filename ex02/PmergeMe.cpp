@@ -27,7 +27,7 @@ std::vector<Item> intsToItems(std::vector<int>& v)
 void  fillPairs(std::vector<Pair>& pairs, std::vector<Item>& items)
 {
 
-  for (std::size_t i = 0; i < items.size(); i = i + 2)
+  for (std::size_t i = 0; i + 1 < items.size(); i += 2)
   {
     Pair pair;
 
@@ -108,8 +108,18 @@ void insertPending(std::vector<Item>& mainChain, std::vector<Item>& pending)
   if (pending.size() == 1)
     return;
 
-  for (std::vector<Item>::iterator it = pending.begin() + 1; it != pending.end(); ++it) //TODO replace regular loop with Jacobstahl sequence
-    binaryInsert(mainChain, *it, mainChain.begin() + 1, mainChain.end());
+  int k = 3;
+
+  std::size_t i = 0;
+  while (i < pending.size() - 1)
+  {
+    int jacob = jacobStahl(k);
+    std::cout << jacob << " JACOB\n";
+    binaryInsert(mainChain, *(pending.begin() + jacob + 1), mainChain.begin() + 1, mainChain.end());
+    i++;
+    k++;
+  }
+  
 
 }
 
