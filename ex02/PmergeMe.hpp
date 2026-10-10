@@ -26,7 +26,6 @@ void  binaryInsert(std::vector<Item>& mainChain, Item& item, std::vector<Item>::
 
 // Deque
 
-void  parseArguments(int argc, char *argv[], std::deque<int>& v);
 void  fordJohnson(std::deque<Item>& items);
 std::deque<Item> intsToItems(std::deque<int>& v);
 void  fillPairs(std::deque<Pair>& pairs, std::deque<Item>& items);
