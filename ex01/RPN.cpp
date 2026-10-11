@@ -1,11 +1,13 @@
 #include "RPN.hpp"
+#include <climits>
+#include <climits>
 #include <sstream>
 #include <stack>
 #include <stdexcept>
 
 static int calculate(int left, int right, char c)
 {
-  int result = 0;
+  long result = 0;
 
   if (c == '+')
     result = left + right;
@@ -49,7 +51,9 @@ int solve(const std::string& expr)
         int right = s.top();
         s.pop();
         int left = s.top();
-        int tmp_res = calculate(left, right, c);
+        long tmp_res = calculate(left, right, c);
+        if (tmp_res > INT_MAX || tmp_res < INT_MIN)
+          throw std::runtime_error("Error");
         s.top() = tmp_res;
       }
     else 
