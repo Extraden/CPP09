@@ -1,25 +1,24 @@
 #include "RPN.hpp"
 #include <climits>
-#include <climits>
 #include <sstream>
 #include <stack>
 #include <stdexcept>
 
-static int calculate(int left, int right, char c)
+static long calculate(int left, int right, char c)
 {
   long result = 0;
 
   if (c == '+')
-    result = left + right;
+    result = static_cast<long>(left) + right;
   else if (c == '-')
-    result = left - right;
+    result = static_cast<long>(left) - right;
   else if (c == '*')
-    result = left * right;
+    result = static_cast<long>(left) * right;
   else if (c == '/')
   {
     if (right == 0)
       throw std::runtime_error("Division by zero");
-    result = left / right;
+    result = static_cast<long>(left) / right;
   }
   else
     throw std::runtime_error("Error");
